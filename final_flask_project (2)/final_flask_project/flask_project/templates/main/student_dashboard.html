@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="student-dashboard">
+
+<!-- HEADER -->
+<div class="page-header" style="display:flex; justify-content:space-between; align-items:center;">
+
+ <div class="page-header">
+   <h1>My Dashboard</h1>
+   <p>Welcome back, {{ student.full_name }}</p>
+</div>
+
+  
+
+</div>
+
+
+<h2 class="current-title">Current Enrollments</h2>
+
+<div class="card-grid">
+
+  {% if enrolled_courses %}
+
+    {% for c in enrolled_courses %}
+    <div class="card">
+
+      <h3>{{ c.course_name }}</h3>
+
+      <p><b>Code:</b> {{ c.course_code }}</p>
+      <p><b>Instructor:</b> {{ c.instructor }}</p>
+      <p><b>Credits:</b> {{ c.credits }}</p>
+      <p><b>Time:</b> {{ c.schedule }}</p>
+
+      <div class="enrollment-actions">
+  <span class="badge">Enrolled</span>
+
+  <form method="POST" action="{{ url_for('enrollment.drop', course_id=c.id) }}">
+    <button class="btn btn-danger">Drop</button>
+  </form>
+</div>
+
+    </div>
+    {% endfor %}
+
+  {% else %}
+    <p>No current enrollments.</p>
+  {% endif %}
+
+</div>
+
+<!-- AVAILABLE COURSES -->
+<h2 class="current-title">Available Courses</h2>
+
+{% set enrolled_ids = enrolled_courses | map(attribute='id') | list %}
+
+<div class="card-grid">
+
+  {% for c in all_courses %}
+
+  <div class="card">
+    <h3>{{ c.course_name }}</h3>
+
+    <p><b>Code:</b> {{ c.course_code }}</p>
+    <p><b>Instructor:</b> {{ c.instructor }}</p>
+    <p><b>Credits:</b> {{ c.credits }}</p>
+    <p><b>Time:</b> {{ c.schedule }}</p>
+
+    {% if c.id in enrolled_ids %}
+        <button class="btn btn-secondary" disabled>Already Enrolled</button>
+    {% else %}
+        <form method="POST" action="{{ url_for('enrollment.enroll', course_id=c.id) }}">
+            <button class="btn btn-primary">Enroll</button>
+        </form>
+    {% endif %}
+
+  </div>
+
+  {% endfor %}
+
+</div>
+
+
+</div>
+
+{% endblock %}

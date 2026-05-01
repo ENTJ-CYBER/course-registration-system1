@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register — AUAF</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
+</head>
+<body class="auth-body">
+  <div class="auth-container">
+    <div class="auth-card" style="max-width:520px">
+      <div class="auth-header">
+        <div class="auth-logo">◈</div>
+        <h1>Create Account</h1>
+        <p>Student Registration</p>
+      </div>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endwith %}
+
+      <form method="POST">
+        {{ form.hidden_tag() }}
+        <div class="form-row">
+          <div class="form-group">
+            {{ form.full_name.label(class="form-label") }}
+            {{ form.full_name(class="form-control") }}
+            {% for e in form.full_name.errors %}<span class="form-error">{{ e }}</span>{% endfor %}
+          </div>
+          <div class="form-group">
+            {{ form.username.label(class="form-label") }}
+            {{ form.username(class="form-control") }}
+            {% for e in form.username.errors %}<span class="form-error">{{ e }}</span>{% endfor %}
+          </div>
+        </div>
+        <div class="form-group">
+          {{ form.email.label(class="form-label") }}
+          {{ form.email(class="form-control") }}
+          {% for e in form.email.errors %}<span class="form-error">{{ e }}</span>{% endfor %}
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            {{ form.student_id.label(class="form-label") }}
+            {{ form.student_id(class="form-control") }}
+            {% for e in form.student_id.errors %}<span class="form-error">{{ e }}</span>{% endfor %}
+          </div>
+          <div class="form-group">
+            {{ form.department.label(class="form-label") }}
+            {{ form.department(class="form-control") }}
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            {{ form.password.label(class="form-label") }}
+            {{ form.password(class="form-control") }}
+            {% for e in form.password.errors %}<span class="form-error">{{ e }}</span>{% endfor %}
+          </div>
+          <div class="form-group">
+            {{ form.password2.label(class="form-label") }}
+            {{ form.password2(class="form-control") }}
+            {% for e in form.password2.errors %}<span class="form-error">{{ e }}</span>{% endfor %}
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+      </form>
+
+      <p class="auth-footer">
+        Already registered? <a href="{{ url_for('auth.login') }}">Sign in</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>

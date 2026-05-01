@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <a href="{{ url_for('students.list_students') }}" class="back-link">← Students</a>
+    <h1 class="page-title">{{ student.full_name }}</h1>
+    <p class="page-subtitle">{{ student.student_id }} · {{ student.department or 'No department' }}</p>
+  </div>
+  <a href="{{ url_for('students.edit_student', student_id=student.id) }}" class="btn btn-ghost">Edit</a>
+</div>
+
+<div class="detail-grid">
+  <div class="detail-main">
+    <!-- Active Enrollments -->
+    <div class="detail-card">
+      <h2>Current Enrollments</h2>
+      {% set active = student.active_enrollments %}
+      {% if active %}
+      <table class="table">
+        <thead><tr><th>Code</th><th>Course</th><th>Credits</th><th>Schedule</th><th>Actions</th></tr></thead>
+        <tbody>
+          {% for e in active %}
+          <tr>
+            <td><code class="course-code-sm">{{ e.course.course_code }}</code></td>
+            <td><a href="{{ url_for('courses.view_course', course_id=e.course.id) }}">{{ e.course.name }}</a></td>
+            <td class="text-center">{{ e.course.credits }}</td>
+            <td class="text-muted">{{ e.course.schedule }}</td>
+            <td>
+              <span class="text-muted">No action</span>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p class="text-muted">Not enrolled in any courses.</p>
+      {% endif %}
+    </div>
+
+    <!-- Enrollment History -->
+    <div class="detail-card" style="margin-top:1.5rem">
+      <h2>Enrollment History</h2>
+      {% set all_e = student.enrollments.order_by('enrolled_at').all() %}
+      {% if all_e %}
+      <table class="table">
+        
+        <tbody>
+          {% for e in all_e %}
+          <tr>
+            <td>{{ e.course.course_code }} — {{ e.course.name }}</td>
+            <td><span class="badge badge-{{ e.status }}">{{ e.status }}</span></td>
+            <td class="text-muted">{{ e.enrolled_at.strftime('%b %d, %Y') }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p class="text-muted">No enrollment history.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="detail-side">
+    <div class="detail-card">
+      <h2>Account Info</h2>
+      <dl class="info-list">
+        <dt>Username</dt><dd>{{ student.username }}</dd>
+        <dt>Email</dt><dd>{{ student.email }}</dd>
+        <dt>Member Since</dt><dd>{{ student.created_at.strftime('%b %d, %Y') }}</dd>
+        <dt>Account Status</dt>
+        <dd>
+          {% if student.is_active %}
+          <span class="badge badge-enrolled">Active</span>
+          {% else %}
+          <span class="badge badge-dropped">Inactive</span>
+          {% endif %}
+        </dd>
+      </dl>
+    </div>
+  </div>
+</div>
+{% endblock %}

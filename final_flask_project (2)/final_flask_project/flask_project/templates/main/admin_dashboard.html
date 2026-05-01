@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title">Admin Dashboard</h1>
+  <div class="page-actions">
+    <a href="{{ url_for('courses.add_course') }}" class="btn btn-primary">+ Add Course</a>
+  </div>
+</div>
+
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-icon">🎓</div>
+    <div class="stat-value">{{ stats.total_students }}</div>
+    <div class="stat-label">Total Students</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">📚</div>
+    <div class="stat-value">{{ stats.total_courses }}</div>
+    <div class="stat-label">Total Courses</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">✅</div>
+    <div class="stat-value">{{ stats.active_courses }}</div>
+    <div class="stat-label">Active Courses</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">📋</div>
+    <div class="stat-value">{{ stats.total_enrollments }}</div>
+    <div class="stat-label">Active Enrollments</div>
+  </div>
+</div>
+
+<div class="section-header">
+  <h2>Recent Enrollments</h2>
+</div>
+
+{% if recent_enrollments %}
+<div class="table-wrapper">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Student</th>
+        <th>Course</th>
+        <th>Status</th>
+        <th>Enrolled</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for e in recent_enrollments %}
+      <tr>
+        <td>
+          <a href="{{ url_for('students.view_student', student_id=e.student.id) }}">
+            {{ e.student.full_name }}
+          </a>
+        </td>
+        <td>
+          <a href="{{ url_for('courses.view_course', course_id=e.course.id) }}">
+            {{ e.course.course_code }} — {{ e.course.name }}
+          </a>
+        </td>
+        <td><span class="badge badge-{{ e.status }}">{{ e.status }}</span></td>
+        <td class="text-muted">{{ e.enrolled_at.strftime('%b %d, %Y') }}</td>
+        <td>
+          {% if e.status == 'enrolled' %}
+          <span class="text-muted">No action</span> </a>
+          {% elif e.grade %}
+          <span class="grade-badge">{{ e.grade }}</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="empty-state">
+  <p>No enrollments yet.</p>
+</div>
+{% endif %}
+{% endblock %}

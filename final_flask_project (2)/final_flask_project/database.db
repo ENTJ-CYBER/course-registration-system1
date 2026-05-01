@@ -1,0 +1,5 @@
+INSERT INTO students (user_id, full_name, department)
+SELECT id, username, 'Not Assigned'
+FROM users
+WHERE role = 'student'
+AND id NOT IN (SELECT user_id FROM students);

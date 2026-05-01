@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <a href="{{ url_for('courses.list_courses') }}" class="back-link">← Courses</a>
+    <h1 class="page-title">{% if course %}Edit Course{% else %}Add Course{% endif %}</h1>
+  </div>
+</div>
+
+<div class="form-card">
+  <form method="POST">
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Course Code</label>
+        <input type="text" name="course_code" class="form-control" placeholder="e.g. CS101"
+               value="{{ course.course_code if course else '' }}" required />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Credits</label>
+        <input type="number" name="credits" class="form-control"
+               value="{{ course.credits if course else '' }}" required />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Course Name</label>
+      <input type="text" name="course_name" class="form-control" placeholder="Full course title"
+             value="{{ course.course_name if course else '' }}" required />
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Instructor</label>
+        <input type="text" name="instructor" class="form-control"
+               value="{{ course.instructor if course else '' }}" required />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Department</label>
+        <input type="text" name="department" class="form-control"
+               value="{{ course.department if course else '' }}" />
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Schedule</label>
+        <input type="text" name="schedule" class="form-control" placeholder="e.g. Mon/Wed 10:00–11:30"
+               value="{{ course.schedule if course else '' }}" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Capacity</label>
+        <input type="number" name="capacity" class="form-control"
+               value="{{ course.capacity if course else '' }}" required />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Description</label>
+      <textarea name="description" class="form-control" rows="4" placeholder="Optional course description...">{{ course.description if course else '' }}</textarea>
+    </div>
+
+    <div class="form-actions">
+      <a href="{{ url_for('courses.list_courses') }}" class="btn btn-ghost">Cancel</a>
+      <button type="submit" class="btn btn-primary">{% if course %}Update Course{% else %}Add Course{% endif %}</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

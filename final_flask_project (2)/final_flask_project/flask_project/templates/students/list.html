@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title">Students</h1>
+</div>
+
+<form method="GET" class="search-form">
+  <div class="search-row">
+    <input type="text" name="search" class="form-control" placeholder="Search by name, email, or student ID…"
+           value="{{ search }}" />
+    <button type="submit" class="btn btn-primary">Search</button>
+    {% if search %}
+    <a href="{{ url_for('students.list_students') }}" class="btn btn-ghost">Clear</a>
+    {% endif %}
+  </div>
+</form>
+
+<p class="result-count">{{ students|length }} student{{ 's' if students|length != 1 }}</p>
+
+{% if students %}
+<div class="table-wrapper">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Student ID</th>
+        <th>Email</th>
+        <th>Department</th>
+        <th>Enrolled</th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for student in students %}
+      <tr>
+        <td><a href="{{ url_for('students.view_student', student_id=student.id) }}">{{ student.full_name }}</a></td>
+        <td><code>{{ student.student_id or '—' }}</code></td>
+        <td class="text-muted">{{ student.email }}</td>
+        <td>{{ student.department or '—' }}</td>
+        <td class="text-center">{{ student.enrolled_count }}</td>
+        <td>
+          {% if student.is_active %}
+          <span class="badge badge-enrolled">Active</span>
+          {% else %}
+          <span class="badge badge-dropped">Inactive</span>
+          {% endif %}
+        </td>
+        <td>
+          <a href="{{ url_for('students.view_student', student_id=student.id) }}" class="btn btn-ghost btn-sm">View</a>
+          <a href="{{ url_for('students.edit_student', student_id=student.id) }}" class="btn btn-ghost btn-sm">Edit</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="empty-state">
+  <p>No students found.</p>
+</div>
+{% endif %}
+{% endblock %}

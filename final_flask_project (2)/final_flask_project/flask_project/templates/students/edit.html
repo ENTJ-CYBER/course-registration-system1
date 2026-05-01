@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <a href="{{ url_for('students.view_student', student_id=student.id) }}" class="back-link">← {{ student.full_name }}</a>
+    <h1 class="page-title">Edit Student</h1>
+  </div>
+</div>
+
+<div class="form-card">
+  <form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+      {{ form.full_name.label(class="form-label") }}
+      {{ form.full_name(class="form-control") }}
+      {% for e in form.full_name.errors %}<span class="form-error">{{ e }}</span>{% endfor %}
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        {{ form.email.label(class="form-label") }}
+        {{ form.email(class="form-control") }}
+        {% for e in form.email.errors %}<span class="form-error">{{ e }}</span>{% endfor %}
+      </div>
+      <div class="form-group">
+        {{ form.student_id.label(class="form-label") }}
+        {{ form.student_id(class="form-control") }}
+        {% for e in form.student_id.errors %}<span class="form-error">{{ e }}</span>{% endfor %}
+      </div>
+    </div>
+    <div class="form-group">
+      {{ form.department.label(class="form-label") }}
+      {{ form.department(class="form-control") }}
+    </div>
+    <div class="form-check">
+      {{ form.is_active() }}
+      {{ form.is_active.label(class="check-label") }}
+    </div>
+    <div class="form-actions">
+      <a href="{{ url_for('students.view_student', student_id=student.id) }}" class="btn btn-ghost">Cancel</a>
+      {{ form.submit(class="btn btn-primary") }}
+    </div>
+  </form>
+</div>
+{% endblock %}
